@@ -10,8 +10,8 @@ import { toast } from '@/components/ui/use-toast';
 import MainLayout from '@/components/Layout/MainLayout';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
-
-type UserRole = 'hospital' | 'doctor' | 'patient' | 'intern';
+import SuperUsersList from '@/components/Login/SuperUsersList';
+import { UserRole } from '@/lib/auth';
 
 // We'll store these in Supabase once integrated
 interface LoginFormData {
@@ -208,7 +208,9 @@ const Login = () => {
                 </TabsContent>
               </Tabs>
 
-              <div className="text-center text-sm">
+              <SuperUsersList />
+
+              <div className="text-center text-sm mt-6">
                 <p className="text-gray-600">
                   Don't have an account?{" "}
                   <a href="#" className="text-hms-primary hover:underline">
