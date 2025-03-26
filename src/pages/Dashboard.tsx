@@ -48,7 +48,7 @@ const Dashboard = () => {
       icon: <UserRound className="h-5 w-5 text-muted-foreground" />
     },
     {
-      title: 'Today's Appointments',
+      title: "Today's Appointments", // Fixed: Using double quotes to handle apostrophe
       value: '48',
       change: '+4.3%',
       trend: 'up',
