@@ -6,9 +6,10 @@ import { Loader2 } from 'lucide-react';
 
 interface PrivateRouteProps {
   children: React.ReactNode;
+  requiredRole?: string;
 }
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, requiredRole }) => {
   const { user, loading } = useAuth();
   const location = useLocation();
 
@@ -23,6 +24,12 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
   if (!user) {
     // Redirect to login if not authenticated
     return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  // If a specific role is required and user doesn't have it
+  if (requiredRole && user.role !== requiredRole) {
+    // Redirect to dashboard, they'll see their appropriate dashboard there
+    return <Navigate to="/dashboard" replace />;
   }
 
   return <>{children}</>;
