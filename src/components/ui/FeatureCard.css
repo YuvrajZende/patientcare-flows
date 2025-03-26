@@ -1,0 +1,20 @@
+
+.feature-card {
+  @apply glass-card p-5 sm:p-6 rounded-xl border border-gray-100 transition-all duration-300 hover:shadow-medium animate-fade-in;
+}
+
+.feature-card-clickable {
+  @apply cursor-pointer hover:-translate-y-1;
+}
+
+.feature-card-icon {
+  @apply mb-3 sm:mb-4 text-hms-primary;
+}
+
+.feature-card-title {
+  @apply text-base sm:text-lg font-semibold mb-1 sm:mb-2;
+}
+
+.feature-card-description {
+  @apply text-xs sm:text-sm text-gray-600;
+}

@@ -2,6 +2,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { ChevronRight } from 'lucide-react';
+import './DashboardCard.css';
 
 type UserType = 'hospital' | 'doctor' | 'patient' | 'intern';
 
@@ -23,20 +24,20 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   return (
     <div 
       className={cn(
-        'dash-card cursor-pointer group',
+        'dashboard-card',
         `dash-card-${userType}`
       )}
       onClick={onClick}
     >
-      <div className="p-6">
-        <div className="mb-4">
+      <div className="dashboard-card-content">
+        <div className="dashboard-card-icon">
           {icon}
         </div>
-        <h3 className="text-lg font-semibold mb-2">{title}</h3>
-        <p className="text-sm text-gray-600 mb-4">{description}</p>
-        <div className="flex items-center text-sm text-hms-primary font-medium">
+        <h3 className="dashboard-card-title">{title}</h3>
+        <p className="dashboard-card-description">{description}</p>
+        <div className="dashboard-card-link">
           <span>Enter Dashboard</span>
-          <ChevronRight size={16} className="ml-1 transform group-hover:translate-x-1 transition-transform" />
+          <ChevronRight size={16} className="dashboard-card-link-icon" />
         </div>
       </div>
     </div>

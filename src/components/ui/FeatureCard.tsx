@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
+import './FeatureCard.css';
 
 interface FeatureCardProps {
   title: string;
@@ -20,17 +21,17 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   return (
     <div 
       className={cn(
-        'glass-card p-5 sm:p-6 rounded-xl border border-gray-100 transition-all duration-300 hover:shadow-medium animate-fade-in',
-        onClick && 'cursor-pointer hover:-translate-y-1',
+        'feature-card',
+        onClick && 'feature-card-clickable',
         className
       )}
       onClick={onClick}
     >
-      <div className="mb-3 sm:mb-4 text-hms-primary">
+      <div className="feature-card-icon">
         {icon}
       </div>
-      <h3 className="text-base sm:text-lg font-semibold mb-1 sm:mb-2">{title}</h3>
-      <p className="text-xs sm:text-sm text-gray-600">{description}</p>
+      <h3 className="feature-card-title">{title}</h3>
+      <p className="feature-card-description">{description}</p>
     </div>
   );
 };

@@ -1,0 +1,28 @@
+
+.dashboard-card {
+  @apply dash-card cursor-pointer group;
+}
+
+.dashboard-card-content {
+  @apply p-6;
+}
+
+.dashboard-card-icon {
+  @apply mb-4;
+}
+
+.dashboard-card-title {
+  @apply text-lg font-semibold mb-2;
+}
+
+.dashboard-card-description {
+  @apply text-sm text-gray-600 mb-4;
+}
+
+.dashboard-card-link {
+  @apply flex items-center text-sm text-hms-primary font-medium;
+}
+
+.dashboard-card-link-icon {
+  @apply ml-1 transform group-hover:translate-x-1 transition-transform;
+}

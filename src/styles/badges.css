@@ -1,0 +1,30 @@
+
+@layer components {
+  .badge {
+    @apply inline-flex items-center justify-center px-2.5 py-0.5 rounded-full text-xs font-medium transition-colors;
+  }
+
+  .badge-hospital {
+    @apply bg-blue-50 text-blue-700;
+  }
+
+  .badge-doctor {
+    @apply bg-green-50 text-green-700;
+  }
+
+  .badge-patient {
+    @apply bg-purple-50 text-purple-700;
+  }
+
+  .badge-intern {
+    @apply bg-amber-50 text-amber-700;
+  }
+
+  .data-error {
+    @apply p-4 rounded-md bg-red-50 text-red-700 border border-red-200;
+  }
+
+  .data-empty {
+    @apply p-6 text-center text-gray-500 italic;
+  }
+}

@@ -1,0 +1,22 @@
+
+@layer components {
+  .dash-card {
+    @apply flex flex-col glass-card rounded-xl overflow-hidden transition-all duration-300 hover:shadow-medium;
+  }
+
+  .dash-card-hospital {
+    @apply border-l-4 border-l-hms-hospital;
+  }
+
+  .dash-card-doctor {
+    @apply border-l-4 border-l-hms-doctor;
+  }
+
+  .dash-card-patient {
+    @apply border-l-4 border-l-hms-patient;
+  }
+
+  .dash-card-intern {
+    @apply border-l-4 border-l-hms-intern;
+  }
+}
