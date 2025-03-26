@@ -1,6 +1,6 @@
 
 .dashboard-card {
-  @apply dash-card cursor-pointer group;
+  @apply dash-card cursor-pointer;
 }
 
 .dashboard-card-content {
@@ -24,5 +24,6 @@
 }
 
 .dashboard-card-link-icon {
-  @apply ml-1 transform group-hover:translate-x-1 transition-transform;
+  @apply ml-1 transform transition-transform;
 }
+

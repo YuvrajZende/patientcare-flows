@@ -24,7 +24,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   return (
     <div 
       className={cn(
-        'dashboard-card',
+        'dashboard-card group',
         `dash-card-${userType}`
       )}
       onClick={onClick}
@@ -37,7 +37,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
         <p className="dashboard-card-description">{description}</p>
         <div className="dashboard-card-link">
           <span>Enter Dashboard</span>
-          <ChevronRight size={16} className="dashboard-card-link-icon" />
+          <ChevronRight size={16} className="dashboard-card-link-icon group-hover:translate-x-1" />
         </div>
       </div>
     </div>
