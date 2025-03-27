@@ -11,8 +11,9 @@ export interface User {
   avatar?: string;
 }
 
-// Mock data for super users
+// Super users for all roles
 export const superUsers: User[] = [
+  // Super admin users
   {
     id: 'super1',
     email: 'admin@hospital.com',
@@ -20,19 +21,37 @@ export const superUsers: User[] = [
     role: 'super',
     avatar: 'https://api.dicebear.com/7.x/personas/svg?seed=admin'
   },
+  // Hospital super users
   {
-    id: 'super2',
-    email: 'system@hospital.com',
-    name: 'System Admin',
-    role: 'super',
-    avatar: 'https://api.dicebear.com/7.x/personas/svg?seed=system'
+    id: 'hospital1',
+    email: 'manager@hospital.com',
+    name: 'Hospital Manager',
+    role: 'hospital',
+    avatar: 'https://api.dicebear.com/7.x/personas/svg?seed=hospital'
   },
+  // Doctor super users
   {
-    id: 'super3',
-    email: 'tech@hospital.com',
-    name: 'Tech Support',
-    role: 'super',
-    avatar: 'https://api.dicebear.com/7.x/personas/svg?seed=tech'
+    id: 'doctor1',
+    email: 'doctor@hospital.com',
+    name: 'Dr. Johnson',
+    role: 'doctor',
+    avatar: 'https://api.dicebear.com/7.x/personas/svg?seed=doctor'
+  },
+  // Patient super users
+  {
+    id: 'patient1',
+    email: 'patient@example.com',
+    name: 'Jane Smith',
+    role: 'patient',
+    avatar: 'https://api.dicebear.com/7.x/personas/svg?seed=patient'
+  },
+  // Intern super users
+  {
+    id: 'intern1',
+    email: 'intern@hospital.com',
+    name: 'Medical Intern',
+    role: 'intern',
+    avatar: 'https://api.dicebear.com/7.x/personas/svg?seed=intern'
   }
 ];
 

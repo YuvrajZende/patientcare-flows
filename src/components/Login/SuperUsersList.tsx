@@ -16,8 +16,8 @@ const SuperUsersList: React.FC<SuperUsersListProps> = ({ className }) => {
   const handleQuickLogin = (user: User) => {
     login(user);
     toast({
-      title: "Super user login",
-      description: `Logged in as ${user.name} with super user privileges.`,
+      title: `${user.role.charAt(0).toUpperCase() + user.role.slice(1)} user login`,
+      description: `Logged in as ${user.name} with ${user.role} privileges.`,
     });
     navigate('/dashboard');
   };
@@ -26,7 +26,7 @@ const SuperUsersList: React.FC<SuperUsersListProps> = ({ className }) => {
     <div className={`mt-6 p-4 bg-slate-50 rounded-lg border border-slate-200 ${className}`}>
       <div className="flex items-center gap-2 mb-3">
         <ShieldCheck className="h-5 w-5 text-amber-500" />
-        <h3 className="font-medium text-sm">Quick Access (Super Users)</h3>
+        <h3 className="font-medium text-sm">Quick Access (Demo Users)</h3>
       </div>
       
       <div className="grid gap-2">
@@ -39,7 +39,9 @@ const SuperUsersList: React.FC<SuperUsersListProps> = ({ className }) => {
             />
             <div className="flex-1 min-w-0">
               <p className="font-medium text-sm truncate">{user.name}</p>
-              <p className="text-xs text-slate-500 truncate">{user.email}</p>
+              <p className="text-xs text-slate-500 truncate">
+                {user.email} • <span className="capitalize">{user.role}</span>
+              </p>
             </div>
             <Button 
               size="sm" 
@@ -54,7 +56,7 @@ const SuperUsersList: React.FC<SuperUsersListProps> = ({ className }) => {
       </div>
       
       <p className="text-xs text-slate-500 mt-3">
-        Super users have elevated privileges for system administration.
+        Use these demo accounts to explore different role-based features.
       </p>
     </div>
   );
