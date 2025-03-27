@@ -5,6 +5,7 @@ import { User, superUsers, login } from '@/lib/auth';
 import { toast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { ShieldCheck } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface SuperUsersListProps {
   className?: string;
@@ -12,13 +13,21 @@ interface SuperUsersListProps {
 
 const SuperUsersList: React.FC<SuperUsersListProps> = ({ className }) => {
   const navigate = useNavigate();
+  const { updateUser } = useAuth(); // Get updateUser from context
 
   const handleQuickLogin = (user: User) => {
+    // First login using the auth module
     login(user);
+    
+    // Then update the auth context directly to ensure it has the latest user data
+    updateUser(user);
+    
     toast({
       title: `${user.role.charAt(0).toUpperCase() + user.role.slice(1)} user login`,
       description: `Logged in as ${user.name} with ${user.role} privileges.`,
     });
+    
+    console.log("Logging in with role:", user.role);
     navigate('/dashboard');
   };
 

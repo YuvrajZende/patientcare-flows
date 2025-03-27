@@ -21,6 +21,8 @@ const Dashboard = () => {
 
   // Render appropriate dashboard based on user role
   const renderDashboard = () => {
+    console.log("Current user role:", user.role); // Add logging to debug
+    
     switch (user.role) {
       case 'hospital':
         return <HospitalDashboard />;
@@ -33,7 +35,7 @@ const Dashboard = () => {
       case 'super':
         return <SuperDashboard />;
       default:
-        return <div>Unknown user role</div>;
+        return <div>Unknown user role: {user.role}</div>;
     }
   };
 

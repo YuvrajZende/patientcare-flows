@@ -11,7 +11,8 @@ import MainLayout from '@/components/Layout/MainLayout';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import SuperUsersList from '@/components/Login/SuperUsersList';
-import { UserRole } from '@/lib/auth';
+import { UserRole, login as authLogin } from '@/lib/auth';
+import { useAuth } from '@/contexts/AuthContext';
 
 // We'll store these in Supabase once integrated
 interface LoginFormData {
@@ -23,6 +24,7 @@ interface LoginFormData {
 const Login = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const { updateUser } = useAuth(); // Get updateUser from context
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
     password: '',
@@ -60,12 +62,16 @@ const Login = () => {
       setIsLoading(false);
       
       if (formData.email && formData.password) {
-        // Store user data in localStorage for now (will use Supabase session later)
-        localStorage.setItem('hms_user', JSON.stringify({
+        // Create user object
+        const user = {
           email: formData.email,
           role: formData.role,
           name: formData.email.split('@')[0]
-        }));
+        };
+        
+        // Store user data and update context
+        authLogin(user);
+        updateUser(user);
         
         toast({
           title: "Login successful",
