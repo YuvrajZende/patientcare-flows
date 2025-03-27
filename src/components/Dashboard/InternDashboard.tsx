@@ -53,7 +53,7 @@ const InternDashboard = () => {
   ];
 
   return (
-    <>
+    <div>
       <Tabs defaultValue="overview" className="animate-fade-in stagger-2" onValueChange={setSelectedTab}>
         <TabsList className="mb-8">
           <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -156,8 +156,8 @@ const InternDashboard = () => {
                     <Progress value={module.completion} className="h-2" />
                   </div>
                 ))}
-              </CardContent>
-            </Card>
+              </div>
+            </CardContent>
           </Card>
         </TabsContent>
 
@@ -212,7 +212,7 @@ const InternDashboard = () => {
           </Card>
         </TabsContent>
       </Tabs>
-    </>
+    </div>
   );
 };
 
