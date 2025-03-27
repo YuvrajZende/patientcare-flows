@@ -1,333 +1,355 @@
 
 import React, { useState } from 'react';
-import { Calendar, Users, GraduationCap, ClipboardList, BookOpen, MessageSquare } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Bell, AlertCircle, User, Calendar, ClipboardList, MessageSquare, HeartPulse, Activity } from 'lucide-react';
+import { toast } from '@/components/ui/use-toast';
 
 const InternDashboard = () => {
-  const [selectedTab, setSelectedTab] = useState<string>('overview');
-
-  // Intern-specific stats
-  const stats = [
+  const [activeTab, setActiveTab] = useState('patients');
+  
+  // Sample patients data
+  const maternityPatients = [
     {
-      title: 'Days Completed',
-      value: '45',
-      total: '180',
-      progress: 25
+      id: 'p1',
+      name: 'Emily Johnson',
+      age: 28,
+      weekOfPregnancy: '24 weeks',
+      assignedDoctor: 'Dr. Sarah Williams',
+      lastCheckup: '2 days ago',
+      nextAppointment: 'Tomorrow, 10:30 AM',
+      status: 'stable',
+      recentVitals: {
+        bloodPressure: '120/80',
+        weight: '65 kg',
+        bloodSugar: '95 mg/dL'
+      },
+      avatar: 'https://api.dicebear.com/7.x/personas/svg?seed=Emily'
     },
     {
-      title: 'Assigned Patients',
-      value: '8',
-      total: '12',
-      progress: 66
+      id: 'p2',
+      name: 'Michelle Davis',
+      age: 30,
+      weekOfPregnancy: '18 weeks',
+      assignedDoctor: 'Dr. James Miller',
+      lastCheckup: '1 week ago',
+      nextAppointment: 'In 3 days, 2:15 PM',
+      status: 'monitor',
+      recentVitals: {
+        bloodPressure: '130/85',
+        weight: '70 kg',
+        bloodSugar: '105 mg/dL'
+      },
+      avatar: 'https://api.dicebear.com/7.x/personas/svg?seed=Michelle'
     },
     {
-      title: 'Procedures Observed',
-      value: '24',
-      total: '50',
-      progress: 48
+      id: 'p3',
+      name: 'Jessica Brown',
+      age: 25,
+      weekOfPregnancy: '32 weeks',
+      assignedDoctor: 'Dr. Sarah Williams',
+      lastCheckup: '3 days ago',
+      nextAppointment: 'In 1 week, 9:00 AM',
+      status: 'stable',
+      recentVitals: {
+        bloodPressure: '118/78',
+        weight: '72 kg',
+        bloodSugar: '90 mg/dL'
+      },
+      avatar: 'https://api.dicebear.com/7.x/personas/svg?seed=Jessica'
+    }
+  ];
+  
+  // Sample tasks data
+  const tasks = [
+    {
+      id: 't1',
+      patient: 'Emily Johnson',
+      task: 'Check blood pressure and record',
+      assignedBy: 'Dr. Sarah Williams',
+      dueTime: '11:30 AM',
+      status: 'pending'
     },
     {
-      title: 'Skill Assessment',
-      value: '3.8',
-      total: '5.0',
-      progress: 76
+      id: 't2',
+      patient: 'Michelle Davis',
+      task: 'Assist with ultrasound procedure',
+      assignedBy: 'Dr. James Miller',
+      dueTime: '2:00 PM',
+      status: 'pending'
+    },
+    {
+      id: 't3',
+      patient: 'Jessica Brown',
+      task: 'Review nutritional guidelines',
+      assignedBy: 'Dr. Sarah Williams',
+      dueTime: '4:30 PM',
+      status: 'pending'
+    }
+  ];
+  
+  // Sample active alerts
+  const activeAlerts = [
+    {
+      id: 'a1',
+      patient: 'Michelle Davis',
+      alert: 'Blood pressure elevated (130/85)',
+      timeAgo: '2 hours ago',
+      severity: 'moderate'
     }
   ];
 
-  // Sample upcoming shifts
-  const upcomingShifts = [
-    { date: 'Today', time: '08:00 AM - 04:00 PM', supervisor: 'Dr. Thompson', department: 'Cardiology' },
-    { date: 'Tomorrow', time: '08:00 AM - 04:00 PM', supervisor: 'Dr. Martinez', department: 'Emergency' },
-    { date: 'Mar 30', time: '12:00 PM - 08:00 PM', supervisor: 'Dr. Wilson', department: 'Pediatrics' }
-  ];
+  const handleTaskComplete = (taskId: string) => {
+    toast({
+      title: "Task marked as completed",
+      description: "The task has been marked as completed and the doctor has been notified."
+    });
+  };
 
-  // Sample learning modules
-  const learningModules = [
-    { title: 'Basic Clinical Procedures', completion: 100, totalHours: 20 },
-    { title: 'Patient Assessment', completion: 65, totalHours: 15 },
-    { title: 'Medical Ethics', completion: 40, totalHours: 10 },
-    { title: 'Emergency Response', completion: 0, totalHours: 25 }
-  ];
+  const handleAlertRespond = (alertId: string) => {
+    toast({
+      title: "Alert response recorded",
+      description: "You've acknowledged this alert. Please follow up with the patient."
+    });
+  };
+
+  const handleViewPatientDetails = (patientId: string) => {
+    // In a real app, this would navigate to a detailed patient view
+    toast({
+      title: "Patient details",
+      description: "Viewing detailed information for this maternity patient."
+    });
+  };
 
   return (
-    <div>
-      <Tabs defaultValue="overview" className="animate-fade-in stagger-2" onValueChange={setSelectedTab}>
-        <TabsList className="mb-8">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
+    <div className="space-y-6">
+      {/* Alerts Section */}
+      {activeAlerts.length > 0 && (
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold flex items-center gap-2 text-amber-600">
+            <Bell className="h-5 w-5" />
+            Active Patient Alerts
+          </h2>
+          
+          {activeAlerts.map(alert => (
+            <Alert 
+              key={alert.id} 
+              className={`${
+                alert.severity === 'high' 
+                  ? 'bg-red-50 border-red-200 text-red-800' 
+                  : 'bg-amber-50 border-amber-200 text-amber-800'
+              }`}
+            >
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Alert for {alert.patient}</AlertTitle>
+              <AlertDescription className="mt-1">
+                <p>{alert.alert}</p>
+                <p className="text-sm">{alert.timeAgo}</p>
+                <Button 
+                  className="mt-2" 
+                  size="sm" 
+                  variant="outline"
+                  onClick={() => handleAlertRespond(alert.id)}
+                >
+                  Acknowledge & Respond
+                </Button>
+              </AlertDescription>
+            </Alert>
+          ))}
+        </div>
+      )}
+      
+      {/* Main Dashboard Tabs */}
+      <Tabs defaultValue="patients" value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="mb-6">
+          <TabsTrigger value="patients">Maternity Patients</TabsTrigger>
+          <TabsTrigger value="tasks">Assigned Tasks</TabsTrigger>
+          <TabsTrigger value="learning">Learning Resources</TabsTrigger>
           <TabsTrigger value="schedule">Schedule</TabsTrigger>
-          <TabsTrigger value="learning">Learning</TabsTrigger>
-          <TabsTrigger value="assessments">Assessments</TabsTrigger>
-          <TabsTrigger value="patients">Patients</TabsTrigger>
-          <TabsTrigger value="chat">Messages</TabsTrigger>
         </TabsList>
-
-        <TabsContent value="overview" className="animate-fade-in">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            {stats.map((stat, index) => (
-              <Card key={index} className="glass-card">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">
-                    {stat.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex justify-between mb-1">
-                    <div className="text-2xl font-bold">{stat.value}</div>
-                    <div className="text-sm text-gray-500">of {stat.total}</div>
-                  </div>
-                  <Progress value={stat.progress} className="h-2" />
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-            <Card className="glass-card lg:col-span-2">
-              <CardHeader>
-                <CardTitle>Upcoming Shifts</CardTitle>
-                <CardDescription>
-                  Your scheduled shifts and rotations
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {upcomingShifts.map((shift, index) => (
-                    <div key={index} className="flex items-start gap-4 p-4 bg-slate-50 rounded-lg">
-                      <div className="w-16 h-16 flex flex-col items-center justify-center bg-blue-100 text-blue-700 rounded-lg">
-                        <span className="text-sm font-medium">{shift.date}</span>
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-medium">{shift.department}</p>
-                        <p className="text-sm text-gray-600">Supervisor: {shift.supervisor}</p>
-                        <p className="text-sm text-gray-600">{shift.time}</p>
-                      </div>
-                      <Button size="sm">Details</Button>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="glass-card">
-              <CardHeader>
-                <CardTitle>Your Supervisor</CardTitle>
-                <CardDescription>
-                  Your primary supervisor info
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center">
-                  <div className="h-20 w-20 bg-gray-200 rounded-full mx-auto mb-4 overflow-hidden">
-                    <img src="https://api.dicebear.com/7.x/personas/svg?seed=supervisor" alt="Supervisor" />
-                  </div>
-                  <h3 className="font-semibold text-lg">Dr. Sarah Thompson</h3>
-                  <p className="text-gray-600 mb-4">Chief of Cardiology</p>
-                  <div className="flex justify-center gap-2">
-                    <Button variant="outline" size="sm">Message</Button>
-                    <Button size="sm">Schedule Meeting</Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <Card className="glass-card">
+        
+        <TabsContent value="patients">
+          <Card>
             <CardHeader>
-              <CardTitle>Learning Progress</CardTitle>
+              <CardTitle>Maternity Patients</CardTitle>
               <CardDescription>
-                Track your progress through required learning modules
+                Monitor and assist with the care of maternity patients
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {learningModules.map((module, index) => (
-                  <div key={index} className="space-y-2">
-                    <div className="flex justify-between">
-                      <div>
-                        <p className="font-medium">{module.title}</p>
-                        <p className="text-sm text-gray-600">{module.totalHours} hours total</p>
+              <div className="space-y-6">
+                {maternityPatients.map(patient => (
+                  <div key={patient.id} className="border rounded-lg p-4 hover:bg-slate-50 transition-colors">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="flex items-center gap-3">
+                        <Avatar>
+                          <AvatarImage src={patient.avatar} alt={patient.name} />
+                          <AvatarFallback>{patient.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <h3 className="font-medium">{patient.name}</h3>
+                          <p className="text-sm text-gray-500">
+                            {patient.age} years • {patient.weekOfPregnancy}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            <span className="font-medium">Doctor:</span> {patient.assignedDoctor}
+                          </p>
+                        </div>
                       </div>
-                      <div className="text-right">
-                        <p className="font-medium">{module.completion}%</p>
-                        <p className="text-sm text-gray-600">completed</p>
+                      
+                      <Badge 
+                        className={
+                          patient.status === 'stable' 
+                            ? 'bg-green-100 text-green-800 border-green-200' 
+                            : 'bg-amber-100 text-amber-800 border-amber-200'
+                        }
+                      >
+                        {patient.status === 'stable' ? 'Stable' : 'Monitor Closely'}
+                      </Badge>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                      <div className="bg-blue-50 p-3 rounded-md">
+                        <p className="text-xs text-blue-600 font-medium">Blood Pressure</p>
+                        <p className="text-lg font-semibold">{patient.recentVitals.bloodPressure}</p>
+                      </div>
+                      
+                      <div className="bg-green-50 p-3 rounded-md">
+                        <p className="text-xs text-green-600 font-medium">Weight</p>
+                        <p className="text-lg font-semibold">{patient.recentVitals.weight}</p>
+                      </div>
+                      
+                      <div className="bg-purple-50 p-3 rounded-md">
+                        <p className="text-xs text-purple-600 font-medium">Blood Sugar</p>
+                        <p className="text-lg font-semibold">{patient.recentVitals.bloodSugar}</p>
                       </div>
                     </div>
-                    <Progress value={module.completion} className="h-2" />
+                    
+                    <div className="flex justify-between items-center text-sm">
+                      <div>
+                        <span className="text-gray-500">Last checkup:</span> {patient.lastCheckup}
+                      </div>
+                      <div>
+                        <span className="text-gray-500">Next appointment:</span> {patient.nextAppointment}
+                      </div>
+                      
+                      <Button 
+                        size="sm"
+                        onClick={() => handleViewPatientDetails(patient.id)}
+                      >
+                        View Details
+                      </Button>
+                    </div>
                   </div>
                 ))}
               </div>
             </CardContent>
           </Card>
         </TabsContent>
-
-        {/* Schedule tab content */}
-        <TabsContent value="schedule" className="animate-fade-in">
-          <Card className="glass-card">
+        
+        <TabsContent value="tasks">
+          <Card>
             <CardHeader>
-              <CardTitle>Rotation Schedule</CardTitle>
+              <CardTitle>Assigned Tasks</CardTitle>
               <CardDescription>
-                View and manage your rotation schedule
+                Tasks assigned to you by doctors for maternity patient care
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {tasks.map(task => (
+                  <div key={task.id} className="p-4 border rounded-lg">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="font-medium">{task.task}</h3>
+                      <Badge className={task.status === 'pending' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}>
+                        {task.status === 'pending' ? 'Pending' : 'Completed'}
+                      </Badge>
+                    </div>
+                    
+                    <div className="text-sm text-gray-600 mb-3">
+                      <p><span className="text-gray-500">Patient:</span> {task.patient}</p>
+                      <p><span className="text-gray-500">Assigned by:</span> {task.assignedBy}</p>
+                      <p><span className="text-gray-500">Due:</span> {task.dueTime} today</p>
+                    </div>
+                    
+                    <div className="flex justify-end gap-2">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => setActiveTab('patients')}
+                      >
+                        View Patient
+                      </Button>
+                      <Button 
+                        size="sm"
+                        onClick={() => handleTaskComplete(task.id)}
+                      >
+                        Mark Complete
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="learning">
+          <Card>
+            <CardHeader>
+              <CardTitle>Maternity Care Training</CardTitle>
+              <CardDescription>
+                Educational resources for maternity patient care
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="border rounded-lg overflow-hidden">
+                  <div className="bg-blue-100 h-40 flex items-center justify-center">
+                    <HeartPulse className="h-16 w-16 text-blue-500" />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-medium mb-1">Maternal Vital Signs Monitoring</h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                      Learn how to properly monitor and record vital signs for pregnant patients.
+                    </p>
+                    <Button variant="outline" className="w-full">Start Module</Button>
+                  </div>
+                </div>
+                
+                <div className="border rounded-lg overflow-hidden">
+                  <div className="bg-purple-100 h-40 flex items-center justify-center">
+                    <Activity className="h-16 w-16 text-purple-500" />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-medium mb-1">Prenatal Risk Assessment</h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                      Learn to identify risk factors and warning signs in prenatal care.
+                    </p>
+                    <Button variant="outline" className="w-full">Start Module</Button>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="schedule">
+          <Card>
+            <CardHeader>
+              <CardTitle>Intern Schedule</CardTitle>
+              <CardDescription>
+                Your rotation schedule and assigned shifts
               </CardDescription>
             </CardHeader>
             <CardContent className="h-[400px] flex items-center justify-center">
               <div className="text-center text-muted-foreground">
                 <Calendar size={48} className="mx-auto mb-4 opacity-50" />
-                <p>Rotation schedule calendar will be displayed here</p>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Learning tab content */}
-        <TabsContent value="learning" className="animate-fade-in">
-          <Card className="glass-card">
-            <CardHeader>
-              <CardTitle>Learning Resources</CardTitle>
-              <CardDescription>
-                Access training modules and educational resources
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="h-[400px] flex items-center justify-center">
-              <div className="text-center text-muted-foreground">
-                <BookOpen size={48} className="mx-auto mb-4 opacity-50" />
-                <p>Learning resources will be displayed here</p>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Assessments tab content */}
-        <TabsContent value="assessments" className="animate-fade-in">
-          <Card className="glass-card">
-            <CardHeader>
-              <CardTitle>Performance Assessments</CardTitle>
-              <CardDescription>
-                View your performance evaluations and feedback
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="h-[400px] flex items-center justify-center">
-              <div className="text-center text-muted-foreground">
-                <ClipboardList size={48} className="mx-auto mb-4 opacity-50" />
-                <p>Assessment details will be displayed here</p>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Patients tab content - NEW */}
-        <TabsContent value="patients" className="animate-fade-in">
-          <Card className="glass-card">
-            <CardHeader>
-              <CardTitle>Patient Assignments</CardTitle>
-              <CardDescription>
-                Patients assigned to you for monitoring and support
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {[1, 2, 3].map((_, index) => (
-                  <div key={index} className="p-4 bg-slate-50 rounded-lg flex items-start gap-4">
-                    <div className="h-12 w-12 rounded-full overflow-hidden">
-                      <img src={`https://api.dicebear.com/7.x/personas/svg?seed=patient${index}`} alt="Patient" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-medium">Patient #{212 + index}</p>
-                      <p className="text-sm text-gray-600">Admitted: March {10 + index}, 2023</p>
-                      <p className="text-sm text-gray-600">Department: {index === 0 ? 'Cardiology' : index === 1 ? 'Orthopedics' : 'General Medicine'}</p>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button size="sm" variant="outline">View Details</Button>
-                      <Button size="sm">Update Status</Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Chat tab content - NEW */}
-        <TabsContent value="chat" className="animate-fade-in">
-          <Card className="glass-card">
-            <CardHeader>
-              <CardTitle>Messages</CardTitle>
-              <CardDescription>
-                Communicate with doctors and patients
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex h-[500px] border rounded-lg overflow-hidden">
-                <div className="w-1/3 border-r">
-                  <div className="p-3 border-b">
-                    <input 
-                      type="text" 
-                      placeholder="Search conversations..." 
-                      className="w-full px-3 py-2 border rounded-lg text-sm"
-                    />
-                  </div>
-                  <div className="overflow-y-auto h-[calc(500px-48px)]">
-                    {['Dr. Thompson', 'Dr. Martinez', 'Supervisor'].map((name, index) => (
-                      <div 
-                        key={index} 
-                        className={`p-3 border-b flex items-center gap-3 hover:bg-slate-50 cursor-pointer ${index === 0 ? 'bg-slate-50' : ''}`}
-                      >
-                        <div className="h-10 w-10 rounded-full overflow-hidden">
-                          <img src={`https://api.dicebear.com/7.x/personas/svg?seed=${name}`} alt={name} />
-                        </div>
-                        <div>
-                          <p className="font-medium text-sm">{name}</p>
-                          <p className="text-xs text-gray-500">Latest message preview...</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="flex-1 flex flex-col">
-                  <div className="p-3 border-b flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-full overflow-hidden">
-                      <img src="https://api.dicebear.com/7.x/personas/svg?seed=Dr. Thompson" alt="Dr. Thompson" />
-                    </div>
-                    <div>
-                      <p className="font-medium">Dr. Thompson</p>
-                      <p className="text-xs text-gray-500">Online</p>
-                    </div>
-                  </div>
-                  <div className="flex-1 p-4 overflow-y-auto">
-                    <div className="space-y-4">
-                      <div className="flex items-end gap-2">
-                        <div className="h-8 w-8 rounded-full overflow-hidden">
-                          <img src="https://api.dicebear.com/7.x/personas/svg?seed=Dr. Thompson" alt="Dr. Thompson" />
-                        </div>
-                        <div className="bg-slate-100 rounded-lg p-3 max-w-[80%]">
-                          <p className="text-sm">Hi there! How is the patient in room 302 doing today?</p>
-                          <p className="text-xs text-gray-500 mt-1">10:30 AM</p>
-                        </div>
-                      </div>
-                      <div className="flex items-end justify-end gap-2">
-                        <div className="bg-blue-100 rounded-lg p-3 max-w-[80%]">
-                          <p className="text-sm">Patient is stable. Vital signs are within normal range, and they've been taking medications as prescribed.</p>
-                          <p className="text-xs text-gray-500 mt-1">10:32 AM</p>
-                        </div>
-                        <div className="h-8 w-8 rounded-full overflow-hidden">
-                          <img src="https://api.dicebear.com/7.x/personas/svg?seed=intern" alt="You" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-3 border-t">
-                    <div className="flex gap-2">
-                      <input 
-                        type="text" 
-                        placeholder="Type a message..." 
-                        className="flex-1 px-4 py-2 border rounded-lg"
-                      />
-                      <Button>Send</Button>
-                    </div>
-                  </div>
-                </div>
+                <p>Schedule and calendar interface will be displayed here</p>
               </div>
             </CardContent>
           </Card>

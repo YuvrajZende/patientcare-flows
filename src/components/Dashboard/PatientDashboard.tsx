@@ -1,41 +1,66 @@
 
 import React, { useState } from 'react';
-import { Calendar, ClipboardList, ActivityIcon, Pill, User, MessageSquare } from 'lucide-react';
+import { Calendar, ClipboardList, ActivityIcon, Pill, User, MessageSquare, HeartPulse, Bell, AlertCircle } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import MaternityTracking from './MaternityTracking';
+import AIAssistant from './AIAssistant';
+import { useAuth } from '@/contexts/AuthContext';
+import { toast } from '@/components/ui/use-toast';
 
 const PatientDashboard = () => {
   const [selectedTab, setSelectedTab] = useState<string>('overview');
+  const { user } = useAuth();
 
   // Sample upcoming appointments
   const upcomingAppointments = [
-    { date: '28 Mar', time: '09:30 AM', doctor: 'Dr. Sarah Williams', department: 'Cardiology' },
-    { date: '2 Apr', time: '02:15 PM', doctor: 'Dr. James Miller', department: 'Orthopedics' }
+    { date: '28 Mar', time: '09:30 AM', doctor: 'Dr. Sarah Williams', department: 'Obstetrics' },
+    { date: '2 Apr', time: '02:15 PM', doctor: 'Dr. James Miller', department: 'Maternal-Fetal Medicine' }
   ];
 
   // Sample medications
   const medications = [
-    { name: 'Lisinopril', dosage: '10mg', frequency: 'Once daily', remaining: '15 days' },
-    { name: 'Metformin', dosage: '500mg', frequency: 'Twice daily', remaining: '8 days' },
-    { name: 'Atorvastatin', dosage: '20mg', frequency: 'Once daily at bedtime', remaining: '20 days' }
+    { name: 'Prenatal Vitamin', dosage: '1 tablet', frequency: 'Once daily', remaining: '15 days' },
+    { name: 'Folic Acid', dosage: '400mcg', frequency: 'Once daily', remaining: '8 days' },
+    { name: 'Iron Supplement', dosage: '27mg', frequency: 'Once daily with food', remaining: '20 days' }
   ];
 
   // Sample lab results
   const labResults = [
     { test: 'Complete Blood Count', date: '15 Mar 2023', status: 'Completed' },
-    { test: 'Lipid Panel', date: '15 Mar 2023', status: 'Completed' },
-    { test: 'Hemoglobin A1C', date: '10 Feb 2023', status: 'Completed' }
+    { test: 'Glucose Screening', date: '15 Mar 2023', status: 'Completed' },
+    { test: 'Ultrasound', date: '10 Feb 2023', status: 'Completed' }
   ];
+
+  const sendSosAlert = () => {
+    toast({
+      title: "Emergency SOS Activated",
+      description: "Medical staff have been alerted and will contact you immediately.",
+      variant: "destructive"
+    });
+  };
 
   return (
     <>
+      <div className="mb-6">
+        <Button 
+          variant="destructive" 
+          className="w-full py-6 text-lg flex items-center justify-center gap-2"
+          onClick={sendSosAlert}
+        >
+          <AlertCircle className="h-6 w-6" />
+          Emergency SOS Alert
+        </Button>
+      </div>
+
       <Tabs defaultValue="overview" className="animate-fade-in stagger-2" onValueChange={setSelectedTab}>
         <TabsList className="mb-8">
           <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="tracking">Health Tracking</TabsTrigger>
+          <TabsTrigger value="assistant">AI Assistant</TabsTrigger>
           <TabsTrigger value="appointments">Appointments</TabsTrigger>
           <TabsTrigger value="records">Medical Records</TabsTrigger>
-          <TabsTrigger value="messages">Messages</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="animate-fade-in">
@@ -44,7 +69,7 @@ const PatientDashboard = () => {
               <CardHeader>
                 <CardTitle>Upcoming Appointments</CardTitle>
                 <CardDescription>
-                  Your scheduled appointments with doctors
+                  Your scheduled maternity care appointments
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -83,7 +108,7 @@ const PatientDashboard = () => {
               <CardHeader>
                 <CardTitle>Current Medications</CardTitle>
                 <CardDescription>
-                  Your prescribed medications and schedule
+                  Your prescribed prenatal medications
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -109,7 +134,7 @@ const PatientDashboard = () => {
             <CardHeader>
               <CardTitle>Recent Lab Results</CardTitle>
               <CardDescription>
-                Your most recent lab test results
+                Your most recent maternity tests and screenings
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -171,16 +196,28 @@ const PatientDashboard = () => {
 
             <Card className="glass-card">
               <CardHeader className="pb-2">
-                <CardTitle className="text-base">Update Profile</CardTitle>
+                <CardTitle className="text-base">Health Tracking</CardTitle>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" className="w-full flex items-center gap-2">
-                  <User className="h-4 w-4" />
-                  <span>Edit Profile</span>
+                <Button 
+                  variant="outline" 
+                  className="w-full flex items-center gap-2"
+                  onClick={() => setSelectedTab('tracking')}
+                >
+                  <HeartPulse className="h-4 w-4" />
+                  <span>Track Health</span>
                 </Button>
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+
+        <TabsContent value="tracking" className="animate-fade-in">
+          <MaternityTracking />
+        </TabsContent>
+
+        <TabsContent value="assistant" className="animate-fade-in">
+          <AIAssistant />
         </TabsContent>
 
         <TabsContent value="appointments" className="animate-fade-in">
@@ -188,7 +225,7 @@ const PatientDashboard = () => {
             <CardHeader>
               <CardTitle>Appointment Management</CardTitle>
               <CardDescription>
-                Schedule and manage your appointments
+                Schedule and manage your maternity care appointments
               </CardDescription>
             </CardHeader>
             <CardContent className="h-[400px] flex items-center justify-center">
@@ -205,30 +242,13 @@ const PatientDashboard = () => {
             <CardHeader>
               <CardTitle>Medical Records</CardTitle>
               <CardDescription>
-                View your complete medical history
+                View your complete maternal health history
               </CardDescription>
             </CardHeader>
             <CardContent className="h-[400px] flex items-center justify-center">
               <div className="text-center text-muted-foreground">
                 <ClipboardList size={48} className="mx-auto mb-4 opacity-50" />
                 <p>Medical records interface will be displayed here</p>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="messages" className="animate-fade-in">
-          <Card className="glass-card">
-            <CardHeader>
-              <CardTitle>Messages</CardTitle>
-              <CardDescription>
-                Communicate with your healthcare providers
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="h-[400px] flex items-center justify-center">
-              <div className="text-center text-muted-foreground">
-                <MessageSquare size={48} className="mx-auto mb-4 opacity-50" />
-                <p>Messaging interface will be displayed here</p>
               </div>
             </CardContent>
           </Card>
