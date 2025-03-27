@@ -48,6 +48,9 @@ const Navbar: React.FC = () => {
           <NavLink to="/login" isActive={isCurrentPath('/login')}>
             Login
           </NavLink>
+          <NavLink to="/register" isActive={isCurrentPath('/register')}>
+            Register
+          </NavLink>
           <NavLink to="/dashboard" isActive={isCurrentPath('/dashboard')}>
             Dashboard
           </NavLink>
@@ -75,6 +78,9 @@ const Navbar: React.FC = () => {
             </MobileNavLink>
             <MobileNavLink to="/login" isActive={isCurrentPath('/login')} onClick={toggleMobileMenu}>
               Login
+            </MobileNavLink>
+            <MobileNavLink to="/register" isActive={isCurrentPath('/register')} onClick={toggleMobileMenu}>
+              Register
             </MobileNavLink>
             <MobileNavLink to="/dashboard" isActive={isCurrentPath('/dashboard')} onClick={toggleMobileMenu}>
               Dashboard

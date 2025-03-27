@@ -8,6 +8,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import PrivateRoute from "@/components/Auth/PrivateRoute";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 
@@ -23,6 +24,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             <Route 
               path="/dashboard" 
               element={

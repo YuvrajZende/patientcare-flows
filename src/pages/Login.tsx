@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Building2, Users, UserRound, GraduationCap, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -219,9 +219,9 @@ const Login = () => {
               <div className="text-center text-sm mt-6">
                 <p className="text-gray-600">
                   Don't have an account?{" "}
-                  <a href="#" className="text-hms-primary hover:underline">
+                  <Link to="/register" className="text-hms-primary hover:underline">
                     Create account
-                  </a>
+                  </Link>
                 </p>
               </div>
             </div>
